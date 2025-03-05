@@ -1,7 +1,7 @@
 from datetime import datetime
 
 # Shop details
-SHOP_NAME = "Harikrishna Super market"
+SHOP_NAME = "Harikrishna Super Market"
 SHOP_ADDRESS = "123, Market Road, Hyderabad, India"
 CONTACT_NUMBER = "Phone: +91-9110010100"
 
@@ -27,6 +27,16 @@ def display_grocery_list():
         print(f"{key}. {item} - ₹{price} per unit/kg")
     print("=" * 40)
 
+# Function to calculate discount
+def calculate_discount(total):
+    if total > 2000:
+        return 0.15  # 15% discount
+    elif total > 1000:
+        return 0.10  # 10% discount
+    elif total > 500:
+        return 0.05  # 5% discount
+    return 0  # No discount
+
 # Function to display the bill
 def generate_bill(items):
     date_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -46,12 +56,19 @@ def generate_bill(items):
         total_amount += total
         print("{:<20} {:<10} {:<10} {:<10}".format(item, quantity, price, total))
 
+    # Calculate discount
+    discount_rate = calculate_discount(total_amount)
+    discount_amount = round(total_amount * discount_rate, 2)
+    subtotal_after_discount = total_amount - discount_amount
+
     # Apply tax (e.g., 5% GST)
-    tax = round(total_amount * 0.05, 2)
-    final_amount = total_amount + tax
+    tax = round(subtotal_after_discount * 0.05, 2)
+    final_amount = subtotal_after_discount + tax
 
     print("-" * 50)
     print(f"{'Subtotal:':<30} ₹{total_amount:.2f}")
+    print(f"{'Discount (' + str(int(discount_rate * 100)) + '%):':<30} ₹{discount_amount:.2f}")
+    print(f"{'Subtotal after Discount:':<30} ₹{subtotal_after_discount:.2f}")
     print(f"{'GST (5%):':<30} ₹{tax:.2f}")
     print(f"{'Final Total:':<30} ₹{final_amount:.2f}")
     print("=" * 50)
